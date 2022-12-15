@@ -9,7 +9,8 @@ function UnicodeDecodeB64(str) {
   for (let i = 0; i < byteCharacters.length; i++) {
     byteNumbers[i] = byteCharacters.charCodeAt(i);
   }
-  return (byteArray = new Uint8Array(byteNumbers));
+  let byteArray = new Uint8Array(byteNumbers)
+  return byteArray;
 }
 
 function findM3u8Url(jsonObject) {
