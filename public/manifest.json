@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "m3u8 downloader",
+  "description": "Base Level Extension",
+  "version": "1.0",
+  "minimum_chrome_version": "10.0",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": "hello_extensions.png"
+  },
+  "permissions": ["downloads", "debugger", "tabs"]
+}
