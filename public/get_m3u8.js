@@ -1,5 +1,7 @@
 console.log("starting m3u8 downloader");
 
+var tabId = parseInt(window.location.search.substring(1))
+
 function UnicodeDecodeB64(str) {
   let byteCharacters = atob(str);
   console.log(byteCharacters.length);
@@ -10,25 +12,35 @@ function UnicodeDecodeB64(str) {
   return (byteArray = new Uint8Array(byteNumbers));
 }
 
-
+function findM3u8Url(jsonObject) {
+  jsonObject
+}
 
 function onEvent(debuggeeId, message, params) {
-  console.log(debuggeeId.id);
-  if (tabId != debuggeeId.id) {
-    console.log("tabId different");
+  if (tabId != debuggeeId.tabId) {
+    console.log(`tabId different tabId:${tabId} debuggeeId:${debuggeeId.tabId}`);
     return;
   }
-  if (message == "Network.dataReceived") console.log(params);
-  else if (message == "Network.responseReceived") console.log(params);
-  else if (message == "Network.requestWillBeSent") console.log(params);
+  if (message == "Network.dataReceived") console.log("Network.dataReceived: " + JSON.stringify(params));
+  else if (message == "Network.responseReceived") console.log("Network.responseReceived: " + JSON.stringify(params));
+  else if (message == "Network.requestWillBeSent") console.log("Network.requestWillBeSent: " + JSON.stringify(params));
 }
 
-async function getNetworkData() {
-  
+function getNetworkData() {
+  chrome.debugger.sendCommand({ tabId: tabId }, "Network.enable");
+  chrome.debugger.onEvent.addListener(onEvent);
 }
+
+window.addEventListener("load", getNetworkData);
+
+
 
 /* 
+
+
 왜 인지는 몰라도 debug html 코드인  headers.html tab id 반환 하는 것처럼 보임
+
+
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   // `tab` will either be a `tabs.Tab` instance or `undefined`.
@@ -44,6 +56,10 @@ window.addEventListener("load", async function () {
   chrome.debugger.sendCommand({ tabId: tabId }, "Network.enable");
   chrome.debugger.onEvent.addListener(onEvent);
 }); */
+
+
+
+
 
 
 /*
