@@ -22,9 +22,20 @@ function onEvent(debuggeeId, message, params) {
     console.log(`tabId different tabId:${tabId} debuggeeId:${debuggeeId.tabId}`);
     return;
   }
-  if (message == "Network.dataReceived") console.log("Network.dataReceived: " + JSON.stringify(params));
-  else if (message == "Network.responseReceived") console.log("Network.responseReceived: " + JSON.stringify(params));
-  else if (message == "Network.requestWillBeSent") console.log("Network.requestWillBeSent: " + JSON.stringify(params));
+  else if (message == "Network.responseReceived") {
+    const URL = params.response.url
+    if (URL.includes(".m3u8")){
+      console.log(URL)
+      let RequestId = params.requestId
+      console.log(RequestId)
+      chrome.debugger.sendCommand({ tabId: tabId }, "Network.getResponseBody", {RequestId: RequestId}, (res) => {
+        console.log(res)
+      })
+    }
+    
+    
+  }
+  // else if (message == "Network.requestWillBeSent") console.log("Network.requestWillBeSent: " + JSON.stringify(params));
 }
 
 function getNetworkData() {
